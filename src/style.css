@@ -46,6 +46,12 @@ table {
 	box-sizing: border-box;
 }
 
+img{
+	margin: 10px;
+	max-height: 500px;
+	max-width: 500px;
+}
+
 h1 {
 	font-family: 'Baloo Paaji', sans-serif;
 	letter-spacing: 2px;
