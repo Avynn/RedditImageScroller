@@ -1,5 +1,7 @@
-var next = '';
-$('.btn').click(function(){
+var previousNext = '';
+var trueNext = '';
+
+$(function(){
 	console.log("Button works");
 	$.ajax({
 		type:"GET",
@@ -33,16 +35,28 @@ $('.btn2').click(function(){
 	console.log('button works');
 	$.ajax({
 		type:"GET",
-		url:"https://www.reddit.com/r/all/hot.json",
+		url:"https://www.reddit.com/r/all/hot.json"+ (previousNext ? ("?after=" + previousNext) : ''),
 		success: function(response){
-			next = response.data.after;
-			console.log(next);
-			console.log("https://www.reddit.com/r/all/hot.json"+ (next ? ("?after=" + next) : ''))
+			previousNext = response.data.after;
+			console.log('previousNext: ' + previousNext);
+			var getTrueNext = function (){
+				$.ajax({
+					type:"GET",
+					url:"https://www.reddit.com/r/all/hot.json"+ (previousNext ? ("?after=" + previousNext) : ''),
+					success: function(response){
+						trueNext = response.data.after;
+						console.log('TrueNext: '+ trueNext);
+						previousNext = trueNext;
+					}
+				})
+			}
+			getTrueNext();
+			console.log("https://www.reddit.com/r/all/hot.json"+ (previousNext ? ("?after=" + previousNext) : ''))
 			console.log('======================================')
 			//console.log(JSON.stringify(response, null, 2));
 			$.ajax({
 				type:"GET",
-				url:"https://www.reddit.com/r/all/hot.json"+ (next ? ("?after=" + next) : ''),
+				url:"https://www.reddit.com/r/all/hot.json"+ (previousNext ? ("?after=" + previousNext) : ''),
 				success: function(response){
 					var children= response.data.children
 					//console.log(JSON.stringify(children, null, 2));
